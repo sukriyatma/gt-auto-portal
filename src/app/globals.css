@@ -31,3 +31,21 @@ body {
     text-wrap: balance;
   }
 }
+
+.ant-menu-item-selected::after, .ant-menu-item-selected::before, .ant-menu-item:hover::after, .ant-menu-item:hover::before{
+  border: none !important;  
+}
+
+.ant-menu-item-selected {
+  background-color: #1F242F !important;
+  border-radius: 0.625rem !important;
+  padding: 0.3125rem 0.9375rem !important;
+  align-items: center !important;
+  gap: 0.9375rem !important;
+  color: #919299 !important;
+  fill: #919299 !important;
+}
+
+input:focus {
+  outline: none;
+}

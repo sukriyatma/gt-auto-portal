@@ -1,13 +1,13 @@
 "use client"
 
-import { Layout, Menu } from "antd";
+import { ConfigProvider, Layout, Menu, MenuProps } from "antd";
 import { Header } from "antd/es/layout/layout";
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
 import MenuIcon from "../icons/menu_icon";
 import { usePathname, useRouter } from "next/navigation";
-import MonitoringIcon from "../elements/MonitoringIcon";
-import DocsIcon from "../elements/DocsIcon";
+import MonitoringIcon from "../icons/MonitoringIcon";
+import DocsIcon from "../icons/DocsIcon";
 
 
 const items: ItemType<MenuItemType>[] = [
@@ -22,7 +22,7 @@ const items: ItemType<MenuItemType>[] = [
             gap: "0.875rem",
             color: "#656E86"
         },
-        className: "text-lg"
+        className: "text-lg",
     },
     {
         key: 'docs',
@@ -43,6 +43,11 @@ export default function DefaultHeader({children}: PropsWithChildren) {
     const router = useRouter()
     const pathName = usePathname()
     const path = pathName.split("/").reverse()
+
+    const onClick: MenuProps['onClick'] = (e) => {
+        router.push("/" + e.key)
+
+    }
     
     return (
         <>
@@ -78,12 +83,11 @@ export default function DefaultHeader({children}: PropsWithChildren) {
                                     paddingLeft: "0.94rem",
                                     paddingTop: "0.31rem",
                                     paddingBottom: "0.31rem",
-                                    border: "none"
+                                    border: "none",
+                                    gap: "0.5rem"
                                 }}
-                                onClick={(item) => 
-                                    router.push("/" + item.key)
-                                }
-                                className="flex gap-[1.88rem]"
+                                onClick={onClick}
+                                className="flex"
                             />
                         </div>
                         <div className="flex content-center justify-center">
@@ -94,7 +98,7 @@ export default function DefaultHeader({children}: PropsWithChildren) {
                     </div>
                 </Header>
             </Layout>
-            <Layout className=" px-10 py-5 !min-h-[calc(100vh-80px)] h-auto">
+            <Layout className=" py-5 !min-h-[calc(100vh-70px)] h-auto !mt-[70px]">
                 {children}
             </Layout>
         </>
