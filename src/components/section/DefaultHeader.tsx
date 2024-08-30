@@ -8,6 +8,7 @@ import MenuIcon from "../icons/menu_icon";
 import { usePathname, useRouter } from "next/navigation";
 import MonitoringIcon from "../icons/MonitoringIcon";
 import DocsIcon from "../icons/DocsIcon";
+import GAPIcon from "../icons/GAPIcon";
 
 
 const items: ItemType<MenuItemType>[] = [
@@ -48,6 +49,10 @@ export default function DefaultHeader({children}: PropsWithChildren) {
         router.push("/" + e.key)
 
     }
+
+    const onCLickWebLogo = () => {
+        router.push("/monitoring")
+    }
     
     return (
         <>
@@ -59,7 +64,7 @@ export default function DefaultHeader({children}: PropsWithChildren) {
                         zIndex: 1,
                         width: '100%',
                         height: 'auto',
-                        padding: "0.94rem",
+                        padding: "0.7rem 1.25rem",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -69,7 +74,8 @@ export default function DefaultHeader({children}: PropsWithChildren) {
                     }}
                 >
                     <div className="w-full flex flex-nowrap justify-between">
-                        <div className="flex items-center justify-center text-lg font-semibold">
+                        <div className="flex items-center justify-center text-lg font-bold gap-[0.62rem] cursor-pointer" onClick={onCLickWebLogo}>
+                            <GAPIcon/>
                             <p>GT Auto Portal</p>
                         </div>
                         <div>
@@ -91,14 +97,14 @@ export default function DefaultHeader({children}: PropsWithChildren) {
                             />
                         </div>
                         <div className="flex content-center justify-center">
-                            <div className="flex items-center border-[1px] p-[0.62rem] rounded-[0.625rem]">
+                            <div className="flex items-center border-[1px] p-[0.6rem] rounded-[0.625rem]">
                                 <MenuIcon/>
                             </div>
                         </div>
                     </div>
                 </Header>
             </Layout>
-            <Layout className=" py-5 !min-h-[calc(100vh-70px)] h-auto !mt-[70px]">
+            <Layout className="py-5 h-[calc(100vh-60px)] !mt-[60px] scrollbar-hidden">
                 {children}
             </Layout>
         </>

@@ -32,6 +32,15 @@ body {
   }
 }
 
+::-webkit-scrollbar
+{
+  display: none;
+}
+.scrollbar-hidden {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 .ant-menu-item-selected::after, .ant-menu-item-selected::before, .ant-menu-item:hover::after, .ant-menu-item:hover::before{
   border: none !important;  
 }
