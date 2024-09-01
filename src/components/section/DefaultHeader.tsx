@@ -43,7 +43,7 @@ const items: ItemType<MenuItemType>[] = [
 export default function DefaultHeader({children}: PropsWithChildren) {
     const router = useRouter()
     const pathName = usePathname()
-    const path = pathName.split("/").reverse()
+    const path = pathName.split("/")
 
     const onClick: MenuProps['onClick'] = (e) => {
         router.push("/" + e.key)
@@ -81,7 +81,7 @@ export default function DefaultHeader({children}: PropsWithChildren) {
                         <div>
                             <Menu
                                 mode="horizontal"
-                                defaultSelectedKeys={[path[0]]}
+                                defaultSelectedKeys={[path[1]]}
                                 items={items}
                                 style={{
                                     flex: 1,
