@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ConfigProvider } from "antd";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
+import AuthProvider from "@/config/AuthProvider";
 
-const roboto = Roboto({
+const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["100" , "300" , "400" , "500" , "700" , "900"],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  style: "normal",
+  variable: "--font-poppins",
   display: "swap"
 })
 
@@ -21,12 +24,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${roboto.className}`}>
-      <ConfigProvider>
-        <body>
-          <AntdRegistry>{children}</AntdRegistry>
-        </body>
-      </ConfigProvider>
+    <html lang="en" className={`${poppins.className}`}>
+      <AuthProvider>
+        <ConfigProvider>
+          <body>
+            <AntdRegistry>{children}</AntdRegistry>
+          </body>
+        </ConfigProvider>
+      </AuthProvider>
     </html>
   );
 }
