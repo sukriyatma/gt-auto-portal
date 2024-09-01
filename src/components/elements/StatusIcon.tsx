@@ -2,7 +2,7 @@ import "@/styles/status-icon.css"
 import React from "react";
 
 interface StatusIconProp {
-	size?: number | 50;
+	size?: string | "50rem";
 	color?: string
 }
 
@@ -11,8 +11,10 @@ const StatusIcon: React.FC<StatusIconProp> = (props) => {
         <div
             className="blob up"
 			style={{
-				height: `${props.size}px`,
-				width: `${props.size}px`
+				height: `${props.size}`,
+				width: `${props.size}`,
+				background: `${props.color}`,
+				boxShadow: `${props.color}`
 			}}
         ></div>
     )
