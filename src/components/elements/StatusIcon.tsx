@@ -9,7 +9,7 @@ interface StatusIconProp {
 const StatusIcon: React.FC<StatusIconProp> = (props) => {
     return (
         <div
-            className="blob up"
+            className="blob"
 			style={{
 				height: `${props.size}`,
 				width: `${props.size}`,

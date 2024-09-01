@@ -20,13 +20,18 @@ const GroupItem = () => {
         gemsTotal: 3000000
     }
 
-    const onConfirmRemoveGroup = () => {
-
+    const onConfirmRemoveGroup = (e: any) => {
+        stopPropagation(e)
     }
 
     const onClick = () => {
         router.push("/monitoring/group/1")
     }
+
+    const stopPropagation = (e: any) => {
+        e.preventDefault();
+        e.stopPropagation();
+    } 
 
     return (
         <div className="cursor-pointer flex flex-col items-start w-[25rem] p-[1.875rem] rounded-[1.25rem] border outline-[#919299] bg-[#FFF] gap-[0.93rem] hover:outline-[#5542F6] hover:outline hover:bg-[#F4F4F4]"
@@ -79,8 +84,9 @@ const GroupItem = () => {
                     title="Delete the group"
                     description="Are you sure to remove this group?"
                     onConfirm={onConfirmRemoveGroup}
+                    onCancel={stopPropagation}
                 >
-                    <Button type="text" danger>Remove</Button>
+                    <Button type="text" danger onClick={stopPropagation}>Remove</Button>
                 </Popconfirm>
                 <p className="text-base text-[#656E86]">Last updated {"1d:5h:1m"} ago</p>
             </div>
