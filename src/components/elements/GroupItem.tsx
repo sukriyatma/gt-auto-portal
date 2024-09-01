@@ -4,8 +4,11 @@ import IpIcon from "../icons/IpIcon";
 import Popconfirm from "antd/es/popconfirm";
 import Button from "antd/es/button/button";
 import { convertNumsToMoneyFormat } from "@/uitls/StringUtils";
+import { useRouter } from "next/navigation";
 
 const GroupItem = () => {
+
+    const router = useRouter()
 
     const data = {
         name: "#RDP Prod 1",
@@ -21,8 +24,13 @@ const GroupItem = () => {
 
     }
 
+    const onClick = () => {
+        router.push("/monitoring/group/1")
+    }
+
     return (
-        <div className="flex flex-col items-start w-[25rem] p-[1.875rem] rounded-[1.25rem] border outline-[#919299] bg-[#FFF] gap-[0.93rem] cursor-default hover:outline-[#5542F6] hover:outline hover:bg-[#F4F4F4]">
+        <div className="cursor-pointer flex flex-col items-start w-[25rem] p-[1.875rem] rounded-[1.25rem] border outline-[#919299] bg-[#FFF] gap-[0.93rem] hover:outline-[#5542F6] hover:outline hover:bg-[#F4F4F4]"
+            onClick={onClick}>
             <div className="flex flex-col items-start">
                 <p className="text-3xl text-[#202020]">{data.name}</p>
                 <div className="flex items-center">

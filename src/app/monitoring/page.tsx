@@ -28,12 +28,13 @@ const Monitoring: React.FC = () => {
                 </div>
             </div>
 
-            <div className="flex flex-row items-center self-stretch p-[0rem_6.25rem] gap-[0.625rem]">
-                <p className="text-2xl text-[#202020] font-medium">Group Collection</p>
+            <div className="flex flex-col items-start self-stretch p-[0rem_6.25rem] gap-[0.625rem]">
+                <p className="text-3xl text-[#202020] font-medium">Group Collections</p>
+                <p className="text-base text-[#656E86]">Oversee and evaluate each of your groups</p>
             </div>
 
             <div className="flex flex-col items-start self-stretch p-[0rem_6.25rem] gap-[0.625rem]">
-                <div className="flex items-center content-center gap-[1.25rem] self-stretch flex-wrap">
+                <div className="flex items-center content-center gap-[1.25rem] self-stretch flex-wrap py-1">
                     <GroupItem/>
                     <GroupItem/>
                     <GroupItem/>
