@@ -11,10 +11,6 @@ export const firebaseConfig = {
     measurementId: "G-RHMW1YD33D"
 };
 
-export const app = initializeApp(firebaseConfig);
-let messaging: Messaging;
+const firebaseApp = initializeApp(firebaseConfig);
 
-if (typeof window !== "undefined") {
-    messaging = getMessaging(app)
-}
-export {messaging}
+export default firebaseApp;

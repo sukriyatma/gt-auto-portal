@@ -4,6 +4,7 @@ import "./globals.css";
 import { ConfigProvider } from "antd";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import AuthProvider from "@/config/AuthProvider";
+import FcmTokenComp from "@/hook/notificationForeground";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -25,6 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${poppins.className}`}>
+      <FcmTokenComp/>
       <AuthProvider>
         <ConfigProvider>
           <body>

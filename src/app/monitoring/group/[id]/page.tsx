@@ -14,7 +14,7 @@ import Progress from "antd/es/progress";
 import { useRouter } from "next/navigation";
 
 interface GroupProps {
-    id: number;
+    id: string;
 }
 
 const Group: React.FC<GroupProps> = (props: GroupProps) => {

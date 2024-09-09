@@ -1,7 +1,25 @@
+"use client";
 import GroupItem from "@/components/elements/GroupItem";
 import OrderIcon from "@/components/icons/OrderIcon";
+import { deleteGroup, getListGroup, GetListGroupReq, GetListGroupRes } from "@/service/groupService";
+import { useEffect, useState } from "react";
 
 const Monitoring: React.FC = () => {
+
+    const [params, setParams] = useState<GetListGroupReq>()
+    const [data, setData] = useState<GetListGroupRes>()
+
+    const onDeleteGroup = (id: string, index: number) => {
+        deleteGroup(id).then(()=> {
+            
+        })
+    }
+
+    useEffect( () => {
+        getListGroup(params).then((res: GetListGroupRes) => {
+            setData(res)
+         });
+    }, [data])
 
     return (
         <div className="overflow-y-auto flex flex-col items-start gap-[1.875rem] self-stretch">
@@ -35,11 +53,24 @@ const Monitoring: React.FC = () => {
 
             <div className="flex flex-col items-start self-stretch p-[0rem_6.25rem] gap-[0.625rem]">
                 <div className="flex items-center content-center gap-[1.25rem] self-stretch flex-wrap py-1">
-                    <GroupItem/>
-                    <GroupItem/>
-                    <GroupItem/>
-                    <GroupItem/>
-                    <GroupItem/>
+                    {
+                        data?.data
+                            .map((group, index) => 
+                                group &&
+                                <GroupItem 
+                                    key={index}
+                                    id={group.id}
+                                    name={group.name}
+                                    ip={group.ip}
+                                    botsTotal={group.botsMeta.total}
+                                    cpuPercentage={group.cpuPercentage}
+                                    ramPercentage={group.ramPercentage}
+                                    gems={group.botsMeta.gems}
+                                    onlinePercentage={group.botsMeta.onlinePercentage}
+                                    updatedAt={group.updatedAt}
+                                />
+                            )
+                    }
                 </div>
             </div>
         </div>        
