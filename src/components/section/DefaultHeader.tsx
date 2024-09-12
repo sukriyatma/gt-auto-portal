@@ -104,7 +104,7 @@ export default function DefaultHeader({children}: PropsWithChildren) {
                     </div>
                 </Header>
             </Layout>
-            <Layout className="py-5 h-[calc(100vh-60px)] !mt-[60px] scrollbar-hidden">
+            <Layout className="bg-[#fff] py-5 h-[calc(100vh-60px)] !mt-[60px] scrollbar-hidden">
                 {children}
             </Layout>
         </>

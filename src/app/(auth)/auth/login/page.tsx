@@ -17,7 +17,7 @@ const SignIn: React.FC = () => {
     }
 
     useEffect(() => {
-        if(session.status == "authenticated") {
+        if(session.status == "authenticated" && session.data.user.data?.accessToken) {
             setClick(true)
             route.push("/monitoring")
         }

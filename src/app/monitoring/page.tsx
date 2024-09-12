@@ -1,7 +1,22 @@
+"use client";
 import GroupItem from "@/components/elements/GroupItem";
 import OrderIcon from "@/components/icons/OrderIcon";
+import { getListGroup, GetListGroupReq, GetListGroupData } from "@/service/groupService";
+import { PaginationResponse } from "@/type/pagination-response";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const Monitoring: React.FC = () => {
+
+    const router = useRouter() 
+    const [params, setParams] = useState<GetListGroupReq>()
+    const [data, setData] = useState<PaginationResponse<GetListGroupData>>()
+
+    useEffect( () => {        
+        getListGroup(params).then((res: PaginationResponse<GetListGroupData>) => {
+            setData(res)
+         });
+    }, [])
 
     return (
         <div className="overflow-y-auto flex flex-col items-start gap-[1.875rem] self-stretch">
@@ -28,17 +43,31 @@ const Monitoring: React.FC = () => {
                 </div>
             </div>
 
-            <div className="flex flex-row items-center self-stretch p-[0rem_6.25rem] gap-[0.625rem]">
-                <p className="text-2xl text-[#202020] font-medium">Group Collection</p>
+            <div className="flex flex-col items-start self-stretch p-[0rem_6.25rem] gap-[0.625rem]">
+                <p className="text-3xl text-[#202020] font-medium">Group Collections</p>
+                <p className="text-base text-[#656E86]">Oversee and evaluate each of your groups</p>
             </div>
 
             <div className="flex flex-col items-start self-stretch p-[0rem_6.25rem] gap-[0.625rem]">
-                <div className="flex items-center content-center gap-[1.25rem] self-stretch flex-wrap">
-                    <GroupItem/>
-                    <GroupItem/>
-                    <GroupItem/>
-                    <GroupItem/>
-                    <GroupItem/>
+                <div className="flex items-center content-center gap-[1.25rem] self-stretch flex-wrap py-1">
+                    {
+                        data?.data
+                            .map((group, index) => 
+                                group &&
+                                <GroupItem 
+                                    key={index}
+                                    id={group.id}
+                                    name={group.groupName}
+                                    ip={group.ip}
+                                    botsTotal={group.botsMeta.total}
+                                    cpuPercentage={group.cpuPercentage}
+                                    ramPercentage={group.ramPercentage}
+                                    gems={group.botsMeta.gems}
+                                    onlinePercentage={group.botsMeta.onlinePercentage}
+                                    updatedAt={group.updatedAt}
+                                />
+                            )
+                    }
                 </div>
             </div>
         </div>        
