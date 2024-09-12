@@ -1,25 +1,22 @@
 "use client";
 import GroupItem from "@/components/elements/GroupItem";
 import OrderIcon from "@/components/icons/OrderIcon";
-import { deleteGroup, getListGroup, GetListGroupReq, GetListGroupRes } from "@/service/groupService";
+import { getListGroup, GetListGroupReq, GetListGroupData } from "@/service/groupService";
+import { PaginationResponse } from "@/type/pagination-response";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const Monitoring: React.FC = () => {
 
+    const router = useRouter() 
     const [params, setParams] = useState<GetListGroupReq>()
-    const [data, setData] = useState<GetListGroupRes>()
+    const [data, setData] = useState<PaginationResponse<GetListGroupData>>()
 
-    const onDeleteGroup = (id: string, index: number) => {
-        deleteGroup(id).then(()=> {
-            
-        })
-    }
-
-    useEffect( () => {
-        getListGroup(params).then((res: GetListGroupRes) => {
+    useEffect( () => {        
+        getListGroup(params).then((res: PaginationResponse<GetListGroupData>) => {
             setData(res)
          });
-    }, [data])
+    }, [])
 
     return (
         <div className="overflow-y-auto flex flex-col items-start gap-[1.875rem] self-stretch">
@@ -60,7 +57,7 @@ const Monitoring: React.FC = () => {
                                 <GroupItem 
                                     key={index}
                                     id={group.id}
-                                    name={group.name}
+                                    name={group.groupName}
                                     ip={group.ip}
                                     botsTotal={group.botsMeta.total}
                                     cpuPercentage={group.cpuPercentage}

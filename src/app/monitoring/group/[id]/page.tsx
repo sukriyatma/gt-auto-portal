@@ -9,22 +9,108 @@ import CPUIcon from "@/components/icons/CPUIcon";
 import DiamondIcon from "@/components/icons/DiamondIcon";
 import HumanIcon from "@/components/icons/HumanIcon";
 import RAMIcon from "@/components/icons/RAMIcon";
-import { Button } from "antd";
-import Progress from "antd/es/progress";
+import { BotStatus } from "@/consts/bot-status";
+import { BotDetail, getDetailsGroup, GetDetailsGroupData } from "@/service/groupService";
+import { Button, StatisticProps } from "antd";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import CountUp from "react-countup";
+import relativeTime from "dayjs/plugin/relativeTime";
+import updateLocale from "dayjs/plugin/updateLocale";
+import dayjs from "dayjs";
+dayjs.extend(relativeTime);
+dayjs.extend(updateLocale);
+
+dayjs.updateLocale('en', {
+    relativeTime: {
+        future: "in %s",
+        past: "%s Ago",
+        s: 'A Few Seconds',
+        m: "A Minute",
+        mm: "%d Minutes",
+        h: "an Hour",
+        hh: "%d Hours",
+        d: "A Day",
+        dd: "%d Days",
+        M: "A Month",
+        MM: "%d Months",
+        y: "A Year",
+        yy: "%d Years"
+    }
+})
 
 interface GroupProps {
-    id: string;
+    params: {
+        id: string
+    }
 }
 
-const Group: React.FC<GroupProps> = (props: GroupProps) => {
+interface GemsValue {
+    prev: number | 0;
+    current: number | 0;
+}
+
+
+const Group = (props: GroupProps) => {
     const router = useRouter();
-    const id = props.id;
+    const id = props.params.id; 
+
+    const [data, setData] = useState<GetDetailsGroupData>();
+    const [gems, setGems] = useState<GemsValue>({current: 0, prev: 0});    
+    const [dataBotConnected, setDataBotConnected] = useState<BotDetail[]>();
+    const [dataBotDisconnected, setDataBotDisconnected] = useState<BotDetail[]>();
+    const [dataBotSuspended, setDataBotSuspended] = useState<BotDetail[]>();
 
     const onBack = () => router.back();
 
+    const separateData = () => {
+        let currentGems = 0;
+        const connectedBots: BotDetail[] = []
+        const disconnectedBots: BotDetail[] = []
+        const suspendedBots: BotDetail[] = []
+
+        data?.bots.forEach(bot => {
+            if (bot.status === BotStatus.CONNECTED) {
+                currentGems += bot.gems;
+                connectedBots.push(bot);
+            }
+            if (bot.status === BotStatus.DISCONNECTED) {
+                currentGems += bot.gems;
+                disconnectedBots.push(bot);
+            }
+            if (bot.status === BotStatus.SUSPENDED) {
+                suspendedBots.push(bot);
+            }
+        })
+
+        setDataBotConnected(connectedBots)
+        setDataBotDisconnected(disconnectedBots);
+        setDataBotSuspended(suspendedBots);
+        setGems({current: currentGems, prev: gems.current})
+    }
+
+    const fetchData = async () => {
+        await getDetailsGroup(id)
+        .then((res) => {
+            setData(res);
+        })
+        .catch(() => {
+            router.replace("/monitoring")
+        });
+    }
+
+    useEffect(() => {
+        fetchData()
+        setInterval(async () => await fetchData(), 25000)
+    }, []);
+
+    useEffect(() => {
+        separateData()
+    }, [data]);
+
+    
     return (
-        <div className="w-full bg-current h-full flex flex-col md:flex-row items-start self-stretch p-4 sm:p-8 md:p-16 gap-4 md:gap-6">
+        <div className="w-full bg-current h-full flex flex-col md:flex-row items-start self-stretch p-4 sm:p-8 md:p-16 gap-4 md:gap-6 overflow-auto">
             <div className="w-full md:w-auto mb-4 md:mb-0">
                 <Button 
                     icon={<BackIcon />} 
@@ -35,8 +121,11 @@ const Group: React.FC<GroupProps> = (props: GroupProps) => {
 
             <div className="w-full flex flex-col items-start self-stretch gap-4 md:gap-6">
                 <div className="flex flex-col items-start">
-                    <p className="text-sm text-[#919299]">2 Hours . 1 Minutes Ago</p>
-                    <p className="text-2xl md:text-4xl text-[#202020] font-medium">#RDP Prod 1</p>
+                    <p className="text-sm text-[#919299]">{
+                        (data?.updatedAt || data?.createdAt) && 
+                        dayjs(Number(data?.updatedAt || data?.createdAt)).fromNow()}
+                    </p>
+                    <p className="text-2xl md:text-4xl text-[#202020] font-medium">#{data?.groupName}</p>
                 </div>
                 <div className="w-full flex flex-col md:flex-row items-start gap-4 md:gap-6 self-stretch">
                     <div className="w-full flex flex-col items-start gap-4 md:gap-6">
@@ -45,35 +134,39 @@ const Group: React.FC<GroupProps> = (props: GroupProps) => {
                             <div className="w-full flex flex-col sm:flex-row items-center gap-2">
                                 <ResourceItem 
                                     icon={<CPUIcon />}
-                                    percentageProgress={70}
-                                    desc="CPU usage at 13:54"
+                                    percentageProgress={data?.cpuPercentage || 0}
+                                    desc={`CPU usage ${
+                                        (data?.updatedAt || data?.createdAt) && 
+                                        dayjs(Number(data?.updatedAt || data?.createdAt)).fromNow()}`}
                                 />
                                 <ResourceItem 
                                     icon={<RAMIcon />}
-                                    percentageProgress={70}
-                                    desc="RAM usage at 13:54"
+                                    percentageProgress={data?.ramPercentage || 0}
+                                    desc={`RAM usage ${
+                                        (data?.updatedAt || data?.createdAt) && 
+                                        dayjs(Number(data?.updatedAt || data?.createdAt)).fromNow()}`}
                                 />
                             </div>
-                            <div className="flex flex-col sm:flex-row items-center gap-2 w-full">
+                            <div className="flex flex-col sm:flex-col md:flex-row items-center gap-2 w-full">
                                 <StatusItem 
                                     icon={<HumanIcon />} 
                                     title="Total" 
-                                    value={19} 
+                                    value={data?.bots.length || 0} 
                                 />
                                 <StatusItem 
                                     icon={<StatusIcon size="1.3rem" color="#57C922" />} 
                                     title="Connected" 
-                                    value={12} 
+                                    value={dataBotConnected?.length || 0} 
                                 />
                                 <StatusItem 
                                     icon={<StatusIcon size="1.3rem" color="#C92222" />} 
                                     title="Disconnected" 
-                                    value={5} 
+                                    value={dataBotDisconnected?.length || 0} 
                                 />
                                 <StatusItem 
                                     icon={<StatusIcon size="1.3rem" color="#E0E0E0" />} 
                                     title="Suspended" 
-                                    value={2} 
+                                    value={dataBotConnected?.length || 0} 
                                 />
                             </div>
                         </div>
@@ -86,29 +179,32 @@ const Group: React.FC<GroupProps> = (props: GroupProps) => {
                                 <DiamondIcon />
                                 <p className="text-base text-[#919299]">Gems</p>
                             </div>
-                            <p className="text-[#202020] text-4xl md:text-5xl">3.000.000</p>
+                            <div className="text-[#202020] text-4xl md:text-5xl">
+                                <CountUp start={gems.prev} end={gems.current} separator="." duration={1} className="text-[#202020] text-4xl md:text-5xl"/>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="flex flex-col items-start gap-2 self-stretch overflow-auto max-h-fit">
+                <div className="h-full flex flex-col items-start gap-2 self-stretch max-h-fit">
                     <p className="text-lg md:text-xl text-[#202020]">Bot List</p>
-                    <div className="flex p-4 justify-between items-start self-stretch flex-wrap rounded-lg gap-y-6 border outline-[#919299] overflow-auto">
-                        <div className="flex flex-col items-start w-full sm:w-[23.125rem] gap-2">
-                            <BotItem status={"DISCONNECTED"} />
-                            <BotItem status={"DISCONNECTED"} />
-                            <BotItem status={"DISCONNECTED"} />
-                        </div>
-                        <div className="flex flex-col items-start w-full sm:w-[23.125rem] gap-2">
-                            <BotItem status={"SUSPENDED"} />
-                            <BotItem status={"SUSPENDED"} />
-                            <BotItem status={"SUSPENDED"} />
-                        </div>
-                        <div className="flex flex-col items-start w-full sm:w-[23.125rem] gap-2">
-                            <BotItem status={"CONNECTED"} />
-                            <BotItem status={"CONNECTED"} />
-                            <BotItem status={"CONNECTED"} />
-                            <BotItem status={"CONNECTED"} />
+                    <div className="flex w-full h-full p-4 border outline-[#919299] rounded-lg">
+                        <div className="flex h-full w-full justify-between items-start content-between flex-col xl:flex-row gap-x-4 gap-y-6 overflow-auto">
+                            <div className="flex flex-col items-start w-full gap-2">
+                                {
+                                    dataBotDisconnected?.map(bot => <BotItem data={bot} groupId={data?.id as string} />)
+                                }
+                            </div>
+                            <div className="flex flex-col items-start w-full gap-2">
+                                {
+                                    dataBotSuspended?.map(bot => <BotItem data={bot} groupId={data?.id as string} />)
+                                }
+                            </div>
+                            <div className="flex flex-col items-start w-full gap-2">
+                                {
+                                    dataBotConnected?.map(bot => <BotItem data={bot} groupId={data?.id as string} />)
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -6,6 +6,7 @@ import Button from "antd/es/button/button";
 import { convertNumsToMoneyFormat } from "@/uitls/StringUtils";
 import { useRouter } from "next/navigation";
 import { deleteGroup } from "@/service/groupService";
+import useNotification from "antd/es/notification/useNotification";
 
 interface GroupItemProps {
     id: string;
@@ -21,15 +22,15 @@ interface GroupItemProps {
 
 const GroupItem: React.FC<GroupItemProps> = (props: GroupItemProps) => {
 
-    const router = useRouter()
+    const router = useRouter();
+    const toast = useNotification()
 
     const onConfirmRemoveGroup = (e: any) => {
         stopPropagation(e);
-        
-    }
 
-    const onClick = () => {
-        router.push(`/monitoring/group/${props.id}`);
+        deleteGroup(props.id).then(()=> {
+            window.location.reload();
+        });
     }
 
     const stopPropagation = (e: any) => {
@@ -37,9 +38,13 @@ const GroupItem: React.FC<GroupItemProps> = (props: GroupItemProps) => {
         e.stopPropagation();
     } 
 
+    const onClick = (id: string) => {
+        router.push(`/monitoring/group/${id}`);
+    }
+
     return (
         <div className="cursor-pointer flex flex-col items-start w-[25rem] p-[1.875rem] rounded-[1.25rem] border outline-[#919299] bg-[#FFF] gap-[0.93rem] hover:outline-[#5542F6] hover:outline hover:bg-[#F4F4F4]"
-            onClick={onClick}>
+            onClick={() => {onClick(props.id)}}>
             <div className="flex flex-col items-start">
                 <p className="text-3xl text-[#202020]">{props.name}</p>
                 <div className="flex items-center">
