@@ -1,5 +1,6 @@
 import { ServerEndpoint } from "@/consts/server-endpoint"
 import server from "@/lib/server"
+import { PaginationResponse } from "@/type/pagination-response"
 
 export interface GetListGroupReq {
     keyword?: string, 
@@ -14,27 +15,48 @@ interface BotsMeta {
     gems: number
 }
 
-export interface GetListGroupRes {
-    data: [
-        {
-            id: string,
-            name : string,
-            ip: string,
-            cpuPercentage : number,
-            ramPercentage : number,
-            botsMeta: BotsMeta
-            updatedAt: number 
-        }
-    ],
-    pagination: {
-        nextPage: string | null
-    }
+export interface BotDetail {
+    id: string;
+    name: string;
+    lvl: number;
+    world: string;
+    status: string; // CONNECTED, DISCONNECTED, SUSPENDED
+    gems: number;
+    updatedAt: number;
+    createdAt: number;
 }
 
-const getListGroup = async (params?: GetListGroupReq | null): Promise<GetListGroupRes> => {
+export interface GetListGroupData {
+    id: string;
+    groupName : string;
+    ip: string;
+    cpuPercentage : number;
+    ramPercentage : number;
+    botsMeta: BotsMeta;
+    updatedAt: number;
+}
+
+export interface GetDetailsGroupData {
+    id: string;
+    groupName : string; // M
+    ip: string;
+    cpuPercentage : number;
+    ramPercentage : number;
+    bots: BotDetail[];
+    createdAt: number;
+    updatedAt: number;
+}
+
+const getListGroup = async (params?: GetListGroupReq | null): Promise<PaginationResponse<GetListGroupData>> => {
     return await server.get(ServerEndpoint.GET_LIST_GROUP, {
         params: params
     }).then(res => res.data);
+}
+
+const getDetailsGroup = async (id: string): Promise<GetDetailsGroupData> => {
+    const uri = `${ServerEndpoint.GET_DETAILS_GROUP}/${id}`
+    return await server.get(uri)
+        .then(res => res.data.data);
 }
 
 const deleteGroup = async (id: string) => {
@@ -43,4 +65,4 @@ const deleteGroup = async (id: string) => {
     }).then(res => res.data);
 }
 
-export { getListGroup, deleteGroup };
+export { getListGroup, deleteGroup, getDetailsGroup };
