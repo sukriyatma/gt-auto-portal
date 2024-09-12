@@ -1,9 +1,10 @@
+import { configuration } from "@/config/configuration"
 import axios from "axios"
 import { getSession } from "next-auth/react"
 
 const server = () => {
     const axiosInstance = axios.create({
-        baseURL: "http://127.0.0.1:3001",
+        baseURL: configuration.BACKEND_HOST,
     })
 
     axiosInstance.interceptors.request.use(async (req)=> {
