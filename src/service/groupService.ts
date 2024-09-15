@@ -6,7 +6,8 @@ export interface GetListGroupReq {
     keyword?: string, 
     status?: string, 
     ram?: string, 
-    cpu?: string
+    cpu?: string;
+    updated?: string;
 }
 
 interface BotsMeta {

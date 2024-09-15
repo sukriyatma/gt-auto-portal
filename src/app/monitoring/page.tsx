@@ -1,19 +1,30 @@
 "use client";
+import FilterItem from "@/components/elements/FilterItem";
 import GroupItem from "@/components/elements/GroupItem";
 import OrderIcon from "@/components/icons/OrderIcon";
+import { Filter } from "@/consts/filter";
 import useGAPSettings from "@/context/GAPSettingsContext";
 import { getListGroup, GetListGroupReq, GetListGroupData } from "@/service/groupService";
 import { PaginationResponse } from "@/type/pagination-response";
-import { useRouter } from "next/navigation";
+import { createQueryParams } from "@/uitls/QueryUtils";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 const Monitoring: React.FC = () => {
 
-    const router = useRouter() 
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams()
     const [params, setParams] = useState<GetListGroupReq>()
     const [data, setData] = useState<PaginationResponse<GetListGroupData>>()
     const { enableAutoUpdate } = useGAPSettings();
     const autoUpdateIntervalRef = useRef<NodeJS.Timeout>();
+
+    const [cpu, setCpu] = useState<Filter | string | undefined>(() => searchParams.get('cpu') ?? undefined);
+    const [ram, setRam] = useState<Filter | string | undefined>(() => searchParams.get('ram') ?? undefined);
+    const [updated, setUpdated] = useState<Filter | string | undefined>(() => searchParams.get('updated') ?? undefined);
+    const [status, setStatus] = useState<Filter | string | undefined>(() => searchParams.get('status') ?? undefined);
+    const [keyword, setKeyword] = useState<Filter | string | undefined>(() => searchParams.get('keyword') ?? undefined);
 
     const fetchData = async () => {
         try {
@@ -24,11 +35,34 @@ const Monitoring: React.FC = () => {
         }
     }
 
-    useEffect( () => {        
-        fetchData()
-    }, [])
+    const setQueryParams = () => {
+        const queryObject = {
+            'cpu': cpu,
+            'ram': ram,
+            'status': status,
+            'updated': updated,
+            'keyword': keyword
+        } 
+        setParams(({
+            ...params,
+            cpu: cpu,
+            ram: ram,
+            status: status,
+            updated: updated,
+            keyword: keyword
+        }));
+        
+        const stringQuery = createQueryParams(queryObject);
+        const location = `${pathname}?${stringQuery}`;
+        router.push(location)
+    }
+
+    // useEffect( () => {
+    //     fetchData();
+    // }, [params])
 
     useEffect( () => {
+        fetchData();
         
         if (autoUpdateIntervalRef.current) {
             clearInterval(autoUpdateIntervalRef.current);
@@ -45,33 +79,28 @@ const Monitoring: React.FC = () => {
                 clearInterval(autoUpdateIntervalRef.current);
             }
         }
-    }, [enableAutoUpdate])
+    }, [enableAutoUpdate, params])
+
+    useEffect( () => {     
+        setQueryParams()   
+    }, [cpu, ram, status, updated, keyword]);
 
     return (
         <div className="overflow-y-auto flex flex-col items-start gap-[1.875rem] self-stretch">
             <div className="w-full bg-[#FFFFFF] border-b-[1px] border-[#C0C0C0]">
                 <div className="flex flex-row flex-nowrap justify-end ">
-                    <div className="flex items-center text-base text-[#656E86]  lg:gap-[1.56rem] py-[0.625rem] px-[1.56rem] overflow-auto">
-                        <div className="flex flex-row items-center lg:w-[25rem] bg-[#FAFAFA] rounded-[0.1875rem]  gap-[0.62rem] p-[0.31rem]">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21" fill="none">
-                                <path d="M17.5 18L13.8808 14.3808M13.8808 14.3808C14.4999 13.7617 14.991 13.0268 15.326 12.2179C15.661 11.4091 15.8335 10.5422 15.8335 9.66666C15.8335 8.79115 15.6611 7.92422 15.326 7.11537C14.991 6.30651 14.4999 5.57156 13.8808 4.95249C13.2617 4.33342 12.5268 3.84234 11.7179 3.5073C10.9091 3.17226 10.0422 2.99982 9.16666 2.99982C8.29115 2.99982 7.42422 3.17226 6.61537 3.5073C5.80651 3.84234 5.07156 4.33342 4.45249 4.95249C3.20221 6.20276 2.49982 7.8985 2.49982 9.66666C2.49982 11.4348 3.20221 13.1305 4.45249 14.3808C5.70276 15.6311 7.3985 16.3335 9.16666 16.3335C10.9348 16.3335 12.6305 15.6311 13.8808 14.3808Z" stroke="#656E86" stroke-width="0.833333" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            <input className="bg-inherit" placeholder="Search by group, ip, bots"/>
-                        </div>
-                        <div className="flex flex-row items-center p-[0.31rem_0.44rem] gap-[0.31rem]">
-                            <p className="text-sm lg:text-base">Status</p>
-                            <OrderIcon/>
-                        </div>
-                        <div className="flex flex-row items-center p-[0.31rem_0.44rem] gap-[0.31rem]">
-                            <p className="text-sm lg:text-base">Updated</p>
-                            <OrderIcon/></div>
-                        <div className="flex flex-row items-center p-[0.31rem_0.44rem] gap-[0.31rem]">
-                            <p className="text-sm lg:text-base">RAM</p>
-                            <OrderIcon/></div>
-                        <div className="flex flex-row items-center p-[0.31rem_0.44rem] gap-[0.31rem]">
-                            <p className="text-sm lg:text-base">CPU</p>
-                            <OrderIcon/></div>
-                    </div>
+                    <FilterItem
+                        cpu={cpu}
+                        ram={ram}
+                        keyword={keyword}
+                        updated={updated}
+                        status={status}
+                        setCpu={setCpu}
+                        setKeyword={setKeyword}
+                        setRam={setRam}
+                        setStatus={setStatus}
+                        setUpdated={setUpdated}
+                    />
                 </div>
             </div>
 

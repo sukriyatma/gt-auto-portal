@@ -20,6 +20,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "GT Auto Portal",
   description: "Automate GT Activity",
+  icons: '/favicon.ico'
 };
 
 export default function RootLayout({
