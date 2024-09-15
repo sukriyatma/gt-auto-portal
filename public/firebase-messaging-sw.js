@@ -1,29 +1,7 @@
-// const { default: firebase } = require("firebase/compat/app");
+importScripts('db/gap-settings-db.js');
 
 importScripts('https://www.gstatic.com/firebasejs/10.5.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.5.0/firebase-messaging-compat.js');
-
-// self.addEventListener('notificationClick', event => {
-//     event.notification.close();
-//     const urlToOpen = event?.notification?.data?.url || '127.0.0.1:3000';
-
-//     event.waitUntil(
-//         clients.matchAll({
-//             type: 'window',
-//         })
-//         .then(windowClients => {
-//             for (const client of windowClients) {
-//                 if (client.url === urlToOpen && 'focus' in client) {
-//                   return client.focus();
-//                 }
-//             }
-//             // If not, open a new window/tab with the target URL
-//             if (clients.openWindow) {
-//                 return clients.openWindow(urlToOpen);
-//             }
-//         })
-//     )
-// })
 
 const firebaseConfig = {
     apiKey: "AIzaSyBtTtL_tQNOy39fNZBJFNULEIPSteolOC4",
@@ -38,19 +16,20 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig)
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage(payload => {
-    console.log("Receive notif onBackground :" ,payload)
-    const notificationTitle = payload.notification.title;
+messaging.onBackgroundMessage(async (payload) => {
+    const notifBgSetting = await getItem("GAP_NOTIF_BG");
+    if (notifBgSetting && notifBgSetting.value === 'DISABLE') return;
+    
+    const notificationTitle = payload.data.title;
     const notificationOptions = {
-        body: payload.notification.body,
-        tag: notificationTitle,
-        icon: payload.notification.image,
+        body: payload.data.body,
+        icon: payload.data.icon,
         data: {
             url: payload.data.url
         }
     }
 
-    return self.registration.showNotification(notificationTitle, notificationOptions);
+    self.registration.showNotification(notificationTitle, notificationOptions)
 })
 
 self.addEventListener('notificationclick', (event) => {
@@ -69,7 +48,7 @@ self.addEventListener('notificationclick', (event) => {
                             return client.focus();
                         }
                     }
-                    // If not, open a new window/tab with the target URL
+
                 if (clients.openWindow) {
                     return clients.openWindow(urlToOpen);
                 }
