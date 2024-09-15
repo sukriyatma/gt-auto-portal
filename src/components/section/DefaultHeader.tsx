@@ -1,6 +1,6 @@
 "use client"
 
-import { ConfigProvider, Layout, Menu, MenuProps } from "antd";
+import { Button, ConfigProvider, Layout, Menu, MenuProps, Modal, Popover, Switch } from "antd";
 import { Header } from "antd/es/layout/layout";
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
 import { PropsWithChildren, useEffect, useState } from "react";
@@ -9,6 +9,9 @@ import { usePathname, useRouter } from "next/navigation";
 import MonitoringIcon from "../icons/MonitoringIcon";
 import DocsIcon from "../icons/DocsIcon";
 import GAPIcon from "../icons/GAPIcon";
+import MenuItem from "../elements/MenuItem";
+import NotificationIcon from "../icons/NotificationIcon";
+import NotifModalItem from "@/components/elements/NotifModalItem";
 
 
 const items: ItemType<MenuItemType>[] = [
@@ -41,9 +44,12 @@ const items: ItemType<MenuItemType>[] = [
 ]
 
 export default function DefaultHeader({children}: PropsWithChildren) {
-    const router = useRouter()
-    const pathName = usePathname()
-    const path = pathName.split("/")
+    const router = useRouter();
+    const pathName = usePathname();
+    const path = pathName.split("/");
+
+    const [openMenu, setOpenMenu] = useState<boolean>(false);
+    const [openNotif, setOpenNotif] = useState<boolean>(false);
 
     const onClick: MenuProps['onClick'] = (e) => {
         router.push("/" + e.key)
@@ -52,6 +58,14 @@ export default function DefaultHeader({children}: PropsWithChildren) {
 
     const onCLickWebLogo = () => {
         router.push("/monitoring")
+    }
+
+    const onClickMenu = () => {
+        setOpenMenu(prev => !prev);
+    }
+
+    const onClickNotif = () => {
+        setOpenNotif(prev => !prev);
     }
     
     return (
@@ -70,13 +84,14 @@ export default function DefaultHeader({children}: PropsWithChildren) {
                         justifyContent: "center",
                         backgroundColor: "#FFF",
                         borderBottomColor: "#C0C0C0",
-                        borderBottomWidth: 1
+                        borderBottomWidth: 1,
+                        overflow: 'auto'
                     }}
                 >
-                    <div className="w-full flex flex-nowrap justify-between">
+                    <div className="w-full flex flex-nowrap justify-between ">
                         <div className="flex items-center justify-center text-lg font-bold gap-[0.62rem] cursor-pointer" onClick={onCLickWebLogo}>
                             <GAPIcon/>
-                            <p>GT Auto Portal</p>
+                            <p className="lg:text-lg text-xs">GT Auto Portal</p>
                         </div>
                         <div>
                             <Menu
@@ -96,15 +111,38 @@ export default function DefaultHeader({children}: PropsWithChildren) {
                                 className="flex"
                             />
                         </div>
-                        <div className="flex content-center justify-center">
-                            <div className="flex items-center border-[1px] p-[0.6rem] rounded-[0.625rem]">
-                                <MenuIcon/>
-                            </div>
+                        <div className="flex content-center items-center justify-center gap-[1rem]">
+
+                            <Popover
+                                open={openNotif}
+                                onOpenChange={onClickNotif}
+                                trigger={'click'}
+                                content={
+                                    <NotifModalItem />
+                                }
+                            >
+                                <Button icon={<NotificationIcon/>} type={'text'}/>
+                            </Popover>
+
+                            <Popover
+                                open={openMenu}
+                                onOpenChange={onClickMenu}
+                                trigger={'click'}
+                                content={
+                                    <MenuItem 
+                                        name="yaTma"
+                                        email="sukriyatma@gmail.com"
+                                        imageUrl={"https://i.ytimg.com/vi/Ng6COehRHdU/hqdefault.jpg"}
+                                        />
+                                }
+                            >
+                                <Button icon={<MenuIcon/>}/>
+                            </Popover>
                         </div>
                     </div>
                 </Header>
             </Layout>
-            <Layout className="bg-[#fff] py-5 h-[calc(100vh-60px)] !mt-[60px] scrollbar-hidden">
+            <Layout className="bg-[#fff] py-5 h-[calc(100vh-60px)] !mt-[60px] scrollbar-hidden">                
                 {children}
             </Layout>
         </>

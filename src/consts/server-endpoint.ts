@@ -5,5 +5,7 @@ export enum ServerEndpoint {
     GET_LIST_GROUP="/private/v1/group/list",
     GET_DETAILS_GROUP="/private/v1/group/detail",
     DELETE_GROUP="/private/v1/group/delete",
-    DELETE_BOT="/private/v1/bot/delete"
+    DELETE_BOT="/private/v1/bot/delete",
+    GET_NOTIFICATION="/private/v1/notifications",
+    READ_NOTIFICATION="/private/v1/notifications/read"
 }
