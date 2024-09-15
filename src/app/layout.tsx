@@ -5,6 +5,9 @@ import { ConfigProvider } from "antd";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import AuthProvider from "@/config/AuthProvider";
 import FcmTokenComp from "@/hook/notificationForeground";
+import { NotificationProvider } from "@/context/NotificationContext";
+import { GAPSettingsProvider } from "@/context/GAPSettingsContext";
+import { IndexDbProvider } from "@/hook/IndexedDB";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -26,11 +29,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${poppins.className}`}>
-      <FcmTokenComp/>
       <AuthProvider>
         <ConfigProvider>
           <body>
-            <AntdRegistry>{children}</AntdRegistry>
+            <AntdRegistry>
+              <IndexDbProvider>
+                <GAPSettingsProvider>
+                  <NotificationProvider>
+                    <FcmTokenComp/>
+                    {children}
+                  </NotificationProvider>
+                </GAPSettingsProvider>
+              </IndexDbProvider>
+            </AntdRegistry>
           </body>
         </ConfigProvider>
       </AuthProvider>
