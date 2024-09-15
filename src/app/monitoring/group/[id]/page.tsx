@@ -13,11 +13,12 @@ import { BotStatus } from "@/consts/bot-status";
 import { BotDetail, getDetailsGroup, GetDetailsGroupData } from "@/service/groupService";
 import { Button, StatisticProps } from "antd";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CountUp from "react-countup";
 import relativeTime from "dayjs/plugin/relativeTime";
 import updateLocale from "dayjs/plugin/updateLocale";
 import dayjs from "dayjs";
+import useGAPSettings from "@/context/GAPSettingsContext";
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
 
@@ -51,7 +52,7 @@ interface GemsValue {
 }
 
 
-const Group = (props: GroupProps) => {
+const Group: React.FC<GroupProps> = (props: GroupProps) => {
     const router = useRouter();
     const id = props.params.id; 
 
@@ -60,6 +61,8 @@ const Group = (props: GroupProps) => {
     const [dataBotConnected, setDataBotConnected] = useState<BotDetail[]>();
     const [dataBotDisconnected, setDataBotDisconnected] = useState<BotDetail[]>();
     const [dataBotSuspended, setDataBotSuspended] = useState<BotDetail[]>();
+    const { enableAutoUpdate } = useGAPSettings();
+    const autoUpdateIntervalRef = useRef<NodeJS.Timeout>();
 
     const onBack = () => router.back();
 
@@ -90,19 +93,36 @@ const Group = (props: GroupProps) => {
     }
 
     const fetchData = async () => {
-        await getDetailsGroup(id)
-        .then((res) => {
-            setData(res);
-        })
-        .catch(() => {
+        try {
+            const res = await getDetailsGroup(id);
+            setData(res)
+        } catch (error) {
             router.replace("/monitoring")
-        });
+        }
     }
 
     useEffect(() => {
         fetchData()
-        setInterval(async () => await fetchData(), 25000)
     }, []);
+
+    useEffect( () => {
+        
+        if (autoUpdateIntervalRef.current) {
+            clearInterval(autoUpdateIntervalRef.current);
+        }
+
+        if (enableAutoUpdate) {
+            autoUpdateIntervalRef.current = setInterval(async () => {
+                await fetchData()
+            }, 25000);            
+        }
+
+        return () => {
+            if (autoUpdateIntervalRef.current) {
+                clearInterval(autoUpdateIntervalRef.current);
+            }
+        }
+    }, [enableAutoUpdate])
 
     useEffect(() => {
         separateData()
