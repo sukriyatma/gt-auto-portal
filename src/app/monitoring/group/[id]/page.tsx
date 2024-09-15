@@ -124,6 +124,25 @@ const Group: React.FC<GroupProps> = (props: GroupProps) => {
         }
     }, [enableAutoUpdate])
 
+    useEffect( () => {
+        
+        if (autoUpdateIntervalRef.current) {
+            clearInterval(autoUpdateIntervalRef.current);
+        }
+
+        if (enableAutoUpdate) {
+            autoUpdateIntervalRef.current = setInterval(async () => {
+                await fetchData()
+            }, 25000);            
+        }
+
+        return () => {
+            if (autoUpdateIntervalRef.current) {
+                clearInterval(autoUpdateIntervalRef.current);
+            }
+        }
+    }, [enableAutoUpdate])
+
     useEffect(() => {
         separateData()
     }, [data]);
