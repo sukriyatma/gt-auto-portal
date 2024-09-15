@@ -14,10 +14,12 @@ import { BotDetail, getDetailsGroup, GetDetailsGroupData } from "@/service/group
 import { Button, StatisticProps } from "antd";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CountUp from "react-countup";
 import relativeTime from "dayjs/plugin/relativeTime";
 import updateLocale from "dayjs/plugin/updateLocale";
 import dayjs from "dayjs";
+import useGAPSettings from "@/context/GAPSettingsContext";
 import useGAPSettings from "@/context/GAPSettingsContext";
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
@@ -53,6 +55,7 @@ interface GemsValue {
 
 
 const Group: React.FC<GroupProps> = (props: GroupProps) => {
+const Group: React.FC<GroupProps> = (props: GroupProps) => {
     const router = useRouter();
     const id = props.params.id; 
 
@@ -61,6 +64,8 @@ const Group: React.FC<GroupProps> = (props: GroupProps) => {
     const [dataBotConnected, setDataBotConnected] = useState<BotDetail[]>();
     const [dataBotDisconnected, setDataBotDisconnected] = useState<BotDetail[]>();
     const [dataBotSuspended, setDataBotSuspended] = useState<BotDetail[]>();
+    const { enableAutoUpdate } = useGAPSettings();
+    const autoUpdateIntervalRef = useRef<NodeJS.Timeout>();
     const { enableAutoUpdate } = useGAPSettings();
     const autoUpdateIntervalRef = useRef<NodeJS.Timeout>();
 
@@ -97,7 +102,12 @@ const Group: React.FC<GroupProps> = (props: GroupProps) => {
             const res = await getDetailsGroup(id);
             setData(res)
         } catch (error) {
+        try {
+            const res = await getDetailsGroup(id);
+            setData(res)
+        } catch (error) {
             router.replace("/monitoring")
+        }
         }
     }
 
@@ -114,7 +124,7 @@ const Group: React.FC<GroupProps> = (props: GroupProps) => {
         if (enableAutoUpdate) {
             autoUpdateIntervalRef.current = setInterval(async () => {
                 await fetchData()
-            }, 5000);            
+            }, 25000);            
         }
 
         return () => {
