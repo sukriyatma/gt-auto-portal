@@ -6,6 +6,7 @@ config({
 })
 
 const configuration = () => ({
+    "NEXTAUTH_SECRET": process.env.NEXTAUTH_SECRET,
     "BACKEND_HOST": process.env.BACKEND_HOST,
     "DISCORD_API_KEY": process.env.DISCORD_API_KEY,
     "DISCORD_AUTH_DOMAIN": process.env.DISCORD_AUTH_DOMAIN,

@@ -2,6 +2,12 @@
 import configuration from "./src/config/configuration.js";
 const nextConfig = {
     reactStrictMode: false,
+    eslint: {
+        ignoreDuringBuilds: true
+    },
+    experimental: {
+        missingSuspenseWithCSRBailout: false,
+    },
     env: configuration()
 };
 

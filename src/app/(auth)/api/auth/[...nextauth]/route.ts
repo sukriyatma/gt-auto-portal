@@ -1,3 +1,4 @@
+import configuration from "@/config/configuration"
 import { loginDiscordProvider } from "@/service/auth"
 import { ApiResponse } from "@/type/api-response"
 import { LoginResponse } from "@/type/auth"
@@ -7,7 +8,7 @@ import { JWT } from "next-auth/jwt"
 import Discord from "next-auth/providers/discord"
 
 
-export const authOptions: AuthOptions = {
+const authOptions: AuthOptions = {
     providers: [
         Discord({
             clientId: "1279402016359190580",
@@ -44,6 +45,10 @@ export const authOptions: AuthOptions = {
             session.user.data = token.data;
             return session;
         },
+    },
+    secret: configuration().NEXTAUTH_SECRET,
+    jwt: {
+        maxAge: 60 * 60 * 24 * 7 // in a week
     }
 }
 
