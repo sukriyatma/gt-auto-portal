@@ -120,7 +120,7 @@ const GroupItem: React.FC<GroupItemProps> = (props: GroupItemProps) => {
                 >
                     <Button type="text" danger onClick={stopPropagation}>Remove</Button>
                 </Popconfirm>
-                <p className="text-base text-[#656E86]">Last updated {dayjs(Number(props?.updatedAt)).fromNow()} ago</p>
+                <p className="text-base text-[#656E86]">Last updated {dayjs(Number(props?.updatedAt)).fromNow()}</p>
             </div>
         </div>
     )
