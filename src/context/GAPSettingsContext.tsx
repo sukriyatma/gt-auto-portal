@@ -51,7 +51,7 @@ export const GAPSettingsProvider: React.FC<React.PropsWithChildren> = ({children
             setEnableAutoUpdate(localStorage.getItem('GAP_AUTO_UPDATE') === 'ENABLE');
 
             const notifBgSetting = await db?.get(STORE_NAME, "GAP_NOTIF_BG")
-            setEnableNotifBg(notifBgSetting && notifBgSetting.value === 'DISABLE'? false: true);
+            setEnableNotifBg(notifBgSetting && notifBgSetting.value === 'ENABLE');
         }
         setUp()
     }, [db])
