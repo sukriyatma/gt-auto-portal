@@ -7,6 +7,29 @@ import { convertNumsToMoneyFormat } from "@/uitls/StringUtils";
 import { useRouter } from "next/navigation";
 import { deleteGroup } from "@/service/groupService";
 import useNotification from "antd/es/notification/useNotification";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import updateLocale from "dayjs/plugin/updateLocale";
+dayjs.extend(relativeTime);
+dayjs.extend(updateLocale);
+
+dayjs.updateLocale('en', {
+    relativeTime: {
+        future: "in %s",
+        past: "%s Ago",
+        s: 'A Few Seconds',
+        m: "A Minute",
+        mm: "%d Minutes",
+        h: "an Hour",
+        hh: "%d Hours",
+        d: "A Day",
+        dd: "%d Days",
+        M: "A Month",
+        MM: "%d Months",
+        y: "A Year",
+        yy: "%d Years"
+    }
+})
 
 interface GroupItemProps {
     id: string;
@@ -97,7 +120,7 @@ const GroupItem: React.FC<GroupItemProps> = (props: GroupItemProps) => {
                 >
                     <Button type="text" danger onClick={stopPropagation}>Remove</Button>
                 </Popconfirm>
-                <p className="text-base text-[#656E86]">Last updated {props.updatedAt} ago</p>
+                <p className="text-base text-[#656E86]">Last updated {dayjs(Number(props?.updatedAt)).fromNow()} ago</p>
             </div>
         </div>
     )
