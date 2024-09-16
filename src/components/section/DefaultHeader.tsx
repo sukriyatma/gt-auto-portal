@@ -12,6 +12,7 @@ import GAPIcon from "../icons/GAPIcon";
 import MenuItem from "../elements/MenuItem";
 import NotificationIcon from "../icons/NotificationIcon";
 import NotifModalItem from "@/components/elements/NotifModalItem";
+import { useSession } from "next-auth/react";
 
 
 const items: ItemType<MenuItemType>[] = [
@@ -45,6 +46,7 @@ const items: ItemType<MenuItemType>[] = [
 
 export default function DefaultHeader({children}: PropsWithChildren) {
     const router = useRouter();
+    const session = useSession();
     const pathName = usePathname();
     const path = pathName.split("/");
 
@@ -130,9 +132,9 @@ export default function DefaultHeader({children}: PropsWithChildren) {
                                 trigger={'click'}
                                 content={
                                     <MenuItem 
-                                        name="yaTma"
-                                        email="sukriyatma@gmail.com"
-                                        imageUrl={"https://i.ytimg.com/vi/Ng6COehRHdU/hqdefault.jpg"}
+                                        name={session.data?.user.name || ""}
+                                        email={session.data?.user.email || ""}
+                                        imageUrl={session.data?.user.image}
                                         />
                                 }
                             >

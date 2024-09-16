@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 interface MenuItemProps {
     name: string;
     email: string;
-    imageUrl: string | null;
+    imageUrl?: string | null;
 }
 
 const MenuItem: React.FC<MenuItemProps> = (props: MenuItemProps) => {
