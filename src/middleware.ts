@@ -4,9 +4,11 @@ export default function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
     const cookie = request.cookies.has("next-auth.session-token")
     
-    if (!cookie) {
+    if (!cookie && pathname !== '/auth/login') {
         return NextResponse.redirect(new URL("/auth/login", request.url));
-    } else if (pathname === '/auth/login') {
+    }
+    
+    if (cookie && pathname === '/auth/login') {
         return NextResponse.redirect(new URL('/monitoring', request.url));
     }
 
@@ -14,5 +16,5 @@ export default function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: "/((?!api|_next|static|public|auth/login).*)",
+    matcher: ['/auth/login'],
 };
