@@ -12,7 +12,7 @@ const StatusItem: React.FC<StatusItemProps> = (props: StatusItemProps) => {
         <CountUp start={0} end={value as number} separator="." duration={3} className="font-semibold text-2xl text-[#202020]"/>
     )
     return (
-        <div className="flex flex-col justify-between items-start border rounded-[0.625rem] outline-[#919299] w-full h-[4.687rem] p-[0.625rem_1.0625rem]">
+        <div className="flex flex-col justify-between items-start border rounded-[0.625rem] outline-[#919299] w-full h-[5.3rem] p-[0.625rem_1.0625rem]">
             <div className="flex justify-between items-start self-stretch">
                 <p className="text-xs text-[#656E86]">{props.title}</p>
                 {props.icon}
