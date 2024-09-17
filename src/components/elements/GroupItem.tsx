@@ -108,7 +108,7 @@ const GroupItem: React.FC<GroupItemProps> = (props: GroupItemProps) => {
                 </div>
                 <div className="flex self-stretch justify-between items-center border-b border-[#919299]">
                     <p className="text-base text-[#656E86]">Gems Total</p>
-                    <p className="text-2xl text-[#202020]">{convertNumsToMoneyFormat(props.gems)}</p>
+                    <p className="text-2xl text-[#202020]">{props.gems? convertNumsToMoneyFormat(props.gems): 0}</p>
                 </div>
             </div>
             <div className="flex justify-between items-center self-stretch">
