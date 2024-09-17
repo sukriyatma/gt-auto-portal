@@ -205,7 +205,7 @@ const Group: React.FC<GroupProps> = (props: GroupProps) => {
                                 <StatusItem 
                                     icon={<StatusIcon size="1.3rem" color="#E0E0E0" />} 
                                     title="Suspended" 
-                                    value={dataBotConnected?.length || 0} 
+                                    value={dataBotSuspended?.length || 0} 
                                 />
                             </div>
                         </div>
