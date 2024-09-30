@@ -27,7 +27,7 @@ const items: ItemType<MenuItemType>[] = [
             gap: "0.875rem",
             color: "#656E86"
         },
-        className: "text-lg",
+        className: "text-lg p-[0.3125rem_0.9375rem]",
     },
     {
         key: 'docs',
@@ -40,7 +40,7 @@ const items: ItemType<MenuItemType>[] = [
             gap: "0.875rem",
             color: "#656E86"
         },
-        className: "text-lg"
+        className: "text-lg p-[0.3125rem_0.9375rem]"
     }
 ]
 
@@ -144,7 +144,9 @@ export default function DefaultHeader({children}: PropsWithChildren) {
                     </div>
                 </Header>
             </Layout>
-            <Layout className="bg-[#fff] py-5 h-[calc(100vh-60px)] !mt-[60px] scrollbar-hidden">                
+            <Layout style={{
+                backgroundColor: '#fff'
+            }} className="py-5 min-h-[calc(100vh-60px)] !mt-[60px] scrollbar-hidden">                
                 {children}
             </Layout>
         </>
