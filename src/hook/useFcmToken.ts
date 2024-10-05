@@ -23,14 +23,12 @@ const useFCMToken = () => {
                         const currentToken = await getToken(messaging, {
                             vapidKey: "BAnQRq4ItH8Fae4_63mDpBkKip9iTCErUgftTI0wyaUygXvq8KMZrJdYwIfvJ5BuitBCshYqiVdU7BqTtNX9EhA"
                         });
-                        if (currentToken && localStorage.getItem('fcmToken') !== currentToken) {
-                            setToken(currentToken);
-                            localStorage.setItem('fcmToken', currentToken);
-                            await server.post(ServerEndpoint.UPDATE_FCM_TOKEN, {
-                                fcmToken: currentToken
-                            })
-                            console.log("Current token", currentToken);
-                        }
+                        
+                        await server.post(ServerEndpoint.UPDATE_FCM_TOKEN, {
+                            fcmToken: currentToken
+                        });
+                        
+                        setToken(currentToken);
                     }
                 }
                 
