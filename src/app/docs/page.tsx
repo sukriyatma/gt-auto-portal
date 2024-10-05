@@ -1,9 +1,8 @@
+"useclient";
+import { redirect, useRouter } from "next/navigation";
 
-const Docs: React.FC = () => {
-
-    return (
-        <></>
-    )
+const Docs = () => {
+    redirect("/docs/introduction");
 }
 
 export default Docs;

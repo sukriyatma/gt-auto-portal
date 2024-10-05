@@ -1,4 +1,5 @@
 import DefaultLayout from "@/components/layout/DefaultLayout";
+import DocsLayout from "@/components/layout/DocsLayout";
 import React from "react";
 
 export default function RootLayout({
@@ -8,7 +9,7 @@ export default function RootLayout({
 }>) {
     return (
         <>
-            <DefaultLayout>{children}</DefaultLayout>
+            <DocsLayout>{children}</DocsLayout>
         </>
     )
 }

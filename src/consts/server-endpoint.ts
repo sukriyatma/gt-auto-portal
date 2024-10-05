@@ -7,5 +7,7 @@ export enum ServerEndpoint {
     DELETE_GROUP="/private/v1/group/delete",
     DELETE_BOT="/private/v1/bot/delete",
     GET_NOTIFICATION="/private/v1/notifications",
-    READ_NOTIFICATION="/private/v1/notifications/read"
+    READ_NOTIFICATION="/private/v1/notifications/read",
+    GET_API_KEY="/private/v1/user/apikey",
+    RESET_API_KEY="/private/v1/user/apikey/reset",
 }

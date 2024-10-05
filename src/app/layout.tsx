@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Anonymous_Pro, Poppins } from "next/font/google";
 import "./globals.css";
 import { ConfigProvider } from "antd";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
@@ -15,7 +15,14 @@ const poppins = Poppins({
   style: "normal",
   variable: "--font-poppins",
   display: "swap"
-})
+});
+
+const anonymPro = Anonymous_Pro({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-anonympro",
+  weight: ['400', '700'],  
+});
 
 export const metadata: Metadata = {
   title: "GT Auto Portal",
@@ -29,9 +36,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${poppins.className}`}>
+    <html lang="en" className={`${poppins.className} ${anonymPro.variable}`}>
       <AuthProvider>
-        <ConfigProvider>
+        <ConfigProvider theme={{
+          token: {
+            fontFamily: "inherit",
+            colorBgBase: "#FFFFFF"
+          }
+        }}>
           <body>
             <AntdRegistry>
               <IndexDbProvider>
