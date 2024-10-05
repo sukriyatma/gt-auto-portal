@@ -3,14 +3,9 @@ import CopyIcon from "@/components/icons/CopyIcon";
 import {toClipboard} from "@/uitls/ClipboardUtils";
 import { Button, notification } from "antd";
 
-interface DocsProps {
-    params: {
-        slug: string
-    }
-}
 
 const Introduction = () => {
-
+    const ENDPOINT = process.env.BACKEND_HOST || "https//:api.gaportal.yatma.me";
     const [api, contextHolder] = notification.useNotification();
 
     return (
@@ -22,11 +17,11 @@ const Introduction = () => {
                 <p className="text-justify text-base text-[#656E86]">A service endpoint is a base URL that specifies the network address of an API service. This service has the following service endpoint and all URIs below are relative to this service endpoint:</p>
             </div>
             <div className="flex items-center gap-[0.625rem]">
-                <p className="text-xl text-[#656E86]">https://api.gaportal.yatma.me</p>
+                <p className="text-xl text-[#656E86]">{ENDPOINT}</p>
                 <Button
                     type="text"
                     icon={<CopyIcon/>}
-                    onClick={() => toClipboard("https://api.gaportal.yatma.me", api)}
+                    onClick={() => toClipboard(ENDPOINT, api)}
                 />
             </div>
         </div>
