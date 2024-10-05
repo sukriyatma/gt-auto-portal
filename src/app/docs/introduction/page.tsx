@@ -17,7 +17,7 @@ const Introduction = () => {
                 <p className="text-justify text-base text-[#656E86]">A service endpoint is a base URL that specifies the network address of an API service. This service has the following service endpoint and all URIs below are relative to this service endpoint:</p>
             </div>
             <div className="flex items-center gap-[0.625rem]">
-                <p className="text-xl text-[#656E86]">{ENDPOINT}</p>
+                <p className="text-xl font-normal text-[#656E86] ff-anonympro">{ENDPOINT}</p>
                 <Button
                     type="text"
                     icon={<CopyIcon/>}
