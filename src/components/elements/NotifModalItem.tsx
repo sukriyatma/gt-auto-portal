@@ -4,6 +4,7 @@ import NotifItem from "@/components/elements/notif/NotifItem";
 import { useEffect, useState } from "react";
 import { getListnotif, NotificationRes, readNotif } from "@/service/notifService";
 import useNotification from "@/context/NotificationContext";
+import DoubleCheckIcon from "../icons/DoubleCheckIcon";
 
 
 const NotifModalItem: React.FC = () => {
@@ -49,14 +50,19 @@ const NotifModalItem: React.FC = () => {
 
 
     return (
-        <div className="inline-flex p-[0.625rem] gap-[0.625rem] flex-col items-start rounded-[0.625rem] border border-r-[#919299] border-b-[#919299] border-l-[#919299]">
+        <div className="inline-flex p-[0.625rem] gap-[0.625rem] flex-col items-start rounded-[1.25rem] border outline-[#919299]">
             <div className="flex flex-row justify-between items-center self-stretch">
                 <p className="text-base font-bold text-[#202020]">Notifications</p>
-                <Button type="text" size="small" onClick={onMarkAllAsRead}>
+                <Button 
+                    type="text"
+                    shape="round" 
+                    onClick={onMarkAllAsRead}
+                    icon={<DoubleCheckIcon/>}
+                >
                     <p className="text-xs text-[#5542F6]">Mark all as read</p>
                 </Button>
             </div>
-            <div className="max-h-[15rem] lg:max-h-[19rem] flex flex-col items-center gap-[0.3125rem] overflow-auto">
+            <div className="max-h-[15rem] py-2 flex flex-col items-center gap-[0.3125rem] overflow-auto">
                 {
                     data && data.map((notif) => (
                         <NotifItem 

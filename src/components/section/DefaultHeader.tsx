@@ -13,6 +13,7 @@ import MenuItem from "../elements/MenuItem";
 import NotificationIcon from "../icons/NotificationIcon";
 import NotifModalItem from "@/components/elements/NotifModalItem";
 import { useSession } from "next-auth/react";
+import "@/styles/popconfirm.scss"
 
 
 const items: ItemType<MenuItemType>[] = [
@@ -114,7 +115,9 @@ export default function DefaultHeader({children}: PropsWithChildren) {
                             />
                         </div>
                         <div className="flex content-center items-center justify-center gap-[1rem]">
-
+                            <ConfigProvider>
+                                
+                            </ConfigProvider>
                             <Popover
                                 open={openNotif}
                                 onOpenChange={onClickNotif}
