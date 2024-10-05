@@ -10,4 +10,8 @@ const getApiKey = async (): Promise<GetApiKey> => {
         .then(res => res.data.data);
 }
 
-export { getApiKey };
+const resetApiKey = async (): Promise<GetApiKey> => {
+    return await server.post(ServerEndpoint.RESET_API_KEY)
+        .then(res => res.data.data);
+}
+export { getApiKey, resetApiKey };

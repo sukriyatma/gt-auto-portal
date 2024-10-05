@@ -4,7 +4,7 @@ import CopyIcon from "@/components/icons/CopyIcon";
 import { DotIcon } from "@/components/icons/DotIcon";
 import EyeClose from "@/components/icons/EyeCloseIcon";
 import EyeOpen from "@/components/icons/EyeOpenIcon";
-import { getApiKey } from "@/service/apiKey";
+import { getApiKey, resetApiKey } from "@/service/apiKey";
 import { toClipboard } from "@/uitls/ClipboardUtils";
 import { Button, notification } from "antd";
 import { useEffect, useState } from "react";
@@ -17,7 +17,12 @@ const Authentication = () => {
     const [statusReset, setStatusReset] = useState<boolean>(false);
 
     const onResetAPIKey = () => {
-        setStatusReset(true);
+        setStatusReset(false);
+        
+        resetApiKey().then(res => {
+            setApiKey(res.apiKey)
+            setStatusReset(prev => !prev);
+        });
     }
 
     const initData = () => {
