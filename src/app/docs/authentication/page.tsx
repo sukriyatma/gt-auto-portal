@@ -1,6 +1,7 @@
 "use client";
 import RequestHeaderItem from "@/components/elements/RequestHeaderItem";
 import CopyIcon from "@/components/icons/CopyIcon";
+import { DotIcon } from "@/components/icons/DotIcon";
 import EyeClose from "@/components/icons/EyeCloseIcon";
 import EyeOpen from "@/components/icons/EyeOpenIcon";
 import { getApiKey } from "@/service/apiKey";
@@ -43,16 +44,19 @@ const Authentication = () => {
                     <p className="font-bold text-xl text-[#202020]">API Key</p> 
                     <p className="text-justify text-base text-[#656E86]">To communicate with the API, authentication is required. The GAP API uses API keys for request authentication. You can generate your API Keys below, dont share the API Keys to others.</p>
                 </div>
-                <div className="w-[70%] flex flex-col content-center items-start gap-[0.625rem]">
+                <div className="w-full flex flex-col content-center items-start gap-[0.625rem]">
                     <div className="w-full flex gap-[0.625rem] items-center ">
-                        <div className="w-full flex p-[0.625rem] items-center gap-[0.3125rem] border rounded-lg border-[#919299]">
-                            <input
-                                style={{}}
-                                type={openVal ? "text" : "password"}
-                                value={apiKey}
-                                className={`w-full text-lg text-[#202020] font-semibold bg-transparent border-none outline-none`}
-                                disabled
-                            />
+                        <div className="w-full flex p-[0.425rem] items-center gap-[0.3125rem] border rounded-lg justify-between">
+                            {
+                                openVal
+                                ? <p className="w-full text-sm text-[#202020] items-center overflow-auto">{apiKey}</p>
+                                : <div className="flex flex-row gap-[0.62rem] items-center overflow-hidden">
+                                    {
+                                        Array(20).fill(<DotIcon/>)
+                                    }
+                                    </div>
+
+                            }
                             <Button
                                 icon={openVal? <EyeOpen/>: <EyeClose/>}
                                 onClick={() => setOpenVal(prev => !prev)}
@@ -88,6 +92,10 @@ const Authentication = () => {
         </>
         
     )
+}
+
+const widthElement = (e: any) => {
+    console.log(e)
 }
 
 export default Authentication;
