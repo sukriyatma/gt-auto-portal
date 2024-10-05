@@ -36,7 +36,7 @@ const Notifitem: React.FC<NotifitemProps> = (props: NotifitemProps) => {
     }, [props.readAt])
 
     return (
-        <div className="w-[18rem] 2xl:w-[32rem]">
+        <div className="w-[18rem] 2xl:w-[25rem]">
             <div className="flex p-[0.1875rem] content-between items-center rounded-[1.25rem] border border-[#919299]">
                     <div className={joinStr([
                         "flex p-[0rem_0.5rem] content-between items-center self-stretch rounded-[1.25rem_0rem_0rem_1.25rem]",
