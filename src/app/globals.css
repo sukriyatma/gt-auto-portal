@@ -57,3 +57,7 @@ body {
 input:focus {
   outline: none;
 }
+
+.ff-anonympro {
+  font-family: var(--font-anonympro);
+}
