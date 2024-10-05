@@ -3,6 +3,7 @@ import RequestHeaderItem from "@/components/elements/RequestHeaderItem";
 import CopyIcon from "@/components/icons/CopyIcon";
 import EyeClose from "@/components/icons/EyeCloseIcon";
 import EyeOpen from "@/components/icons/EyeOpenIcon";
+import { getApiKey } from "@/service/apiKey";
 import { toClipboard } from "@/uitls/ClipboardUtils";
 import { Button, notification } from "antd";
 import { useEffect, useState } from "react";
@@ -18,8 +19,14 @@ const Authentication = () => {
         setStatusReset(true);
     }
 
+    const initData = () => {
+        getApiKey().then(res => {
+            setApiKey(res.apiKey);
+        });
+    }
+
     useEffect(() => {
-        setApiKey("/te+ltAwZlV7yxGlSTWxfNY8k/lvAB+Q3j6ROHItORw=");
+        initData();
     }, []);
 
     const headerDataSource = [{
