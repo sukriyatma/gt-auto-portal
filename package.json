@@ -21,7 +21,8 @@
     "next-auth": "^4.24.6",
     "react": "^18",
     "react-countup": "^6.5.3",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "sass": "^1.79.4"
   },
   "devDependencies": {
     "@ant-design/cssinjs": "^1.18.4",
