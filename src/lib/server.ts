@@ -1,5 +1,5 @@
-import axios from "axios"
-import { getSession } from "next-auth/react"
+import axios, { HttpStatusCode } from "axios"
+import { getSession, signOut } from "next-auth/react"
 import "dotenv/config"
 
 const server = () => {
@@ -14,7 +14,18 @@ const server = () => {
             req.headers.Authorization = `Bearer ${session.user.data?.accessToken}`;
         }
         return req;
-    })
+    });
+
+    axiosInstance.interceptors.response.use(
+        async (response) => response,
+        async (error) => {
+            if (error.response.status === HttpStatusCode.Unauthorized) {
+                signOut({ callbackUrl: "/auth/login" });
+            }
+
+            return error;
+        }
+    )
 
     return axiosInstance;
 }
