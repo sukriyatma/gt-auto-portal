@@ -26,7 +26,8 @@ messaging.onBackgroundMessage(async (payload) => {
         icon: payload.data.icon,
         data: {
             url: payload.data.url
-        }
+        },
+        timestamp: Number(payload.data.createdAt)
     }
 
     self.registration.showNotification(notificationTitle, notificationOptions)
