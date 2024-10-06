@@ -8,6 +8,7 @@ import FcmTokenComp from "@/hook/notificationForeground";
 import { NotificationProvider } from "@/context/NotificationContext";
 import { GAPSettingsProvider } from "@/context/GAPSettingsContext";
 import { IndexDbProvider } from "@/hook/IndexedDB";
+import { ToastProvider } from "@/context/ToastContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -49,8 +50,10 @@ export default function RootLayout({
               <IndexDbProvider>
                 <GAPSettingsProvider>
                   <NotificationProvider>
-                    <FcmTokenComp/>
-                    {children}
+                    <ToastProvider>
+                      <FcmTokenComp/>
+                      {children}  
+                    </ToastProvider>
                   </NotificationProvider>
                 </GAPSettingsProvider>
               </IndexDbProvider>
