@@ -10,6 +10,9 @@ import useNotification from "antd/es/notification/useNotification";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import updateLocale from "dayjs/plugin/updateLocale";
+import CopyIcon from "../icons/CopyIcon";
+import { toClipboard } from "@/uitls/ClipboardUtils";
+import useToast from "@/context/ToastContext";
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
 
@@ -46,7 +49,7 @@ interface GroupItemProps {
 const GroupItem: React.FC<GroupItemProps> = (props: GroupItemProps) => {
 
     const router = useRouter();
-    const toast = useNotification()
+    const {api} = useToast();
 
     const onConfirmRemoveGroup = (e: any) => {
         stopPropagation(e);
@@ -65,11 +68,23 @@ const GroupItem: React.FC<GroupItemProps> = (props: GroupItemProps) => {
         router.push(`/monitoring/group/${id}`);
     }
 
+    const onClickCopy = (e: any) => {
+        stopPropagation(e);
+        toClipboard(props.name, api);
+    }
+
     return (
         <div className="cursor-pointer flex flex-col items-start w-[25rem] p-[1.875rem] rounded-[1.25rem] border outline-[#919299] bg-[#FFF] gap-[0.93rem] hover:outline-[#5542F6] hover:outline hover:bg-[#F4F4F4]"
             onClick={() => {onClick(props.id)}}>
             <div className="flex flex-col items-start">
-                <p className="text-3xl text-[#202020]">{props.name}</p>
+                <div className="flex flex-row items-center gap-[0.62rem]">
+                    <p className="text-3xl text-[#202020]">{props.name}</p>
+                    <Button
+                        type="text"
+                        icon={<CopyIcon/>}
+                        onClick={onClickCopy}
+                    />
+                </div>
                 <div className="flex items-center">
                     <IpIcon/>
                     <p className="text-[#656E86] text-lg font-medium">{props.ip}</p>
