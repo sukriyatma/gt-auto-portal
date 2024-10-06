@@ -19,6 +19,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import updateLocale from "dayjs/plugin/updateLocale";
 import dayjs from "dayjs";
 import useGAPSettings from "@/context/GAPSettingsContext";
+import IpIcon from "@/components/icons/IpIcon";
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
 
@@ -165,6 +166,13 @@ const Group: React.FC<GroupProps> = (props: GroupProps) => {
                         dayjs(Number(data?.updatedAt || data?.createdAt)).fromNow()}
                     </p>
                     <p className="text-2xl md:text-4xl text-[#202020] font-medium">#{data?.groupName}</p>
+                    {
+                        data?.ip &&
+                        <div className="flex items-center">
+                                <IpIcon/>
+                            <p className="text-[#656E86] text-lg font-medium">{data?.ip}</p>
+                        </div>
+                    }
                 </div>
                 <div className="w-full flex flex-col md:flex-row items-start gap-4 md:gap-6 self-stretch">
                     <div className="w-full flex flex-col items-start gap-4 md:gap-6">
