@@ -20,6 +20,9 @@ import updateLocale from "dayjs/plugin/updateLocale";
 import dayjs from "dayjs";
 import useGAPSettings from "@/context/GAPSettingsContext";
 import IpIcon from "@/components/icons/IpIcon";
+import CopyIcon from "@/components/icons/CopyIcon";
+import { toClipboard } from "@/uitls/ClipboardUtils";
+import useToast from "@/context/ToastContext";
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
 
@@ -64,6 +67,7 @@ const Group: React.FC<GroupProps> = (props: GroupProps) => {
     const [dataBotSuspended, setDataBotSuspended] = useState<BotDetail[]>();
     const { enableAutoUpdate } = useGAPSettings();
     const autoUpdateIntervalRef = useRef<NodeJS.Timeout>();
+    const { api } = useToast();
 
     const onBack = () => router.back();
 
@@ -142,7 +146,14 @@ const Group: React.FC<GroupProps> = (props: GroupProps) => {
                 clearInterval(autoUpdateIntervalRef.current);
             }
         }
-    }, [enableAutoUpdate])
+    }, [enableAutoUpdate]);
+
+    const onClickCopy = () => {
+        toClipboard(
+            data?.groupName || "", 
+            api
+        );
+    }
 
     useEffect(() => {
         separateData()
@@ -165,7 +176,14 @@ const Group: React.FC<GroupProps> = (props: GroupProps) => {
                         (data?.updatedAt || data?.createdAt) && 
                         dayjs(Number(data?.updatedAt || data?.createdAt)).fromNow()}
                     </p>
-                    <p className="text-2xl md:text-4xl text-[#202020] font-medium">#{data?.groupName}</p>
+                    <div className="flex flex-row items-center gap-[0.62rem]">
+                        <p className="text-2xl md:text-4xl text-[#202020] font-medium">#{data?.groupName}</p>
+                        <Button
+                            type="text"
+                            icon={<CopyIcon/>}
+                            onClick={onClickCopy}
+                        />
+                    </div>
                     {
                         data?.ip &&
                         <div className="flex items-center">
