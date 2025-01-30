@@ -6,6 +6,7 @@ import server from "@/lib/server";
 import { getMessaging, getToken } from "firebase/messaging";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import "dotenv/config";
 
 const useFCMToken = () => {
     const [token, setToken] = useState('');
@@ -23,7 +24,7 @@ const useFCMToken = () => {
 
                     if (permission === 'granted') {
                         const currentToken = await getToken(messaging, {
-                            vapidKey: "BAnQRq4ItH8Fae4_63mDpBkKip9iTCErUgftTI0wyaUygXvq8KMZrJdYwIfvJ5BuitBCshYqiVdU7BqTtNX9EhA"
+                            vapidKey: process.env.FIREBASE_VAPID_KEY
                         });
                         
                         if (session.status === "authenticated") {
