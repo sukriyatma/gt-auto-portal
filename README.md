@@ -1,6 +1,6 @@
-### **Project Description: GT Auto Portal**
+# **GT Auto Portal**
 
-**GT Auto Portal Frontend** is a **Next.js**-based web application that provides an interactive interface for clients to monitor and manage their bot activity in real-time. The frontend connects to the **GT Auto Portal Service** backend to track bot performance, operational metrics, and activity. It integrates with **Firebase Cloud Messaging** to deliver real-time notifications and includes **Discord OAuth** for authentication, providing a seamless and secure login experience.
+**GT Auto Portal** is a **Next.js**-based web application that provides an interactive interface for clients to monitor and manage their bot activity in real-time. The frontend connects to the [**GT Auto Portal Service**](https://github.com/sukriyatma/gt-auto-portal-service) backend to track bot performance, operational metrics, and activity. It integrates with **Firebase Cloud Messaging** to deliver real-time notifications and includes **Discord OAuth** for authentication, providing a seamless and secure login experience.
 
 This project is intended as a **personal project** and is designed for clients to easily track bot activities through an intuitive dashboard with the help of real-time updates and data analytics.
 
