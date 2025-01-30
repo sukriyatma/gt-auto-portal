@@ -2,7 +2,7 @@ import configuration from "@/config/configuration"
 import { loginDiscordProvider } from "@/service/auth"
 import { ApiResponse } from "@/type/api-response"
 import { LoginResponse } from "@/type/auth"
-import axios from "axios"
+import "dotenv/config"
 import NextAuth, { AuthOptions, User } from "next-auth"
 import { JWT } from "next-auth/jwt"
 import Discord from "next-auth/providers/discord"
@@ -11,8 +11,8 @@ import Discord from "next-auth/providers/discord"
 const authOptions: AuthOptions = {
     providers: [
         Discord({
-            clientId: "1279402016359190580",
-            clientSecret: "c_vhkNEeUEVeef2Z4KoxKvlGEVKAWZF1",
+            clientId: process.env.DISCORD_CLIENT_ID || "client-id",
+            clientSecret: process.env.DISCORD_CLIENT_SECRET || "client-secret",
         })
     ],
     pages: {},
